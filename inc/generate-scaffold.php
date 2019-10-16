@@ -1,6 +1,6 @@
 <?php
 /**
- * Insert a page for theme scaffolding.
+ * Create a demo page.
  *
  * @filesource https://developer.wordpress.org/reference/functions/wp_insert_post/
  * @author Mike England <mike.england@webdevstudios.com>
