@@ -7,15 +7,35 @@
  */
 function gfd_setup_page_template() {
 
-	// Get page post type object.
-	$post_type_object = get_post_type_object( 'page' );
+	// Post Type to attach a template to.
+	$post_type_object = get_post_type_object( 'post' );
 
 	// Assign blocks to page.
 	$post_type_object->template = array(
-		array( 'gfd/scaffolding' ),
+		array( 'core/heading',
+			array(
+				'content' => 'Main Heading...', // https://github.com/WordPress/gutenberg/blob/master/packages/block-library/src/heading/index.js#L30
+				'level' => '1' // https://github.com/WordPress/gutenberg/blob/master/packages/block-library/src/heading/index.js#L31
+			)
+		),
+		array( 'core/gallery', array(
+			'placeholder' => 'Add Description...',
+			array(
+				'columns' => 3,
+			)
+		) ),
+		array( 'core/paragraph', array(
+			'placeholder' => 'Add Description...',
+		) ),
+		array( 'core/block', array( 'ref' => [34], ) )
 	);
 
-	// Force template in content area.
+	/**
+	 * Lock the template from being edited.
+	 *
+	 * @link Template Lockinghttps://developer.wordpress.org/block-editor/developers/block-api/block-templates/#locking
+	 * @param string 'all' or 'insert'.
+	 */
 	$post_type_object->template_lock = 'all';
 }
 add_action( 'init', 'gfd_setup_page_template' );
