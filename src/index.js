@@ -1,4 +1,4 @@
 /**
  * Internal dependencies
  */
-import './adding-selectors';
+import './block-style-variations';
