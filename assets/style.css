@@ -1,0 +1,7 @@
+.is-style-roundy-round li img {
+	border-radius: 20px;
+}
+
+.is-style-blocky-block li img {
+	border: 3px solid #222;
+}
