@@ -23,6 +23,9 @@ include_once( plugin_dir_path( __FILE__ ) . '/inc/generate-scaffold.php' );
 // Setup blocks on page.
 include_once( plugin_dir_path( __FILE__ ) . '/inc/template.php' );
 
+// Import SSR style demo.
+include_once( plugin_dir_path( __FILE__ ) . '/src/ch2-server-side-renders/ch2-filters.php' );
+
 /**
  * Delete generated pages when plugin is deactivated.
  *
