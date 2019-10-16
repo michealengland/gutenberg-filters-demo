@@ -10,7 +10,7 @@ function gfd_blocks_editor_scripts() {
 	wp_enqueue_script(
 		'gfd-blocks-js',
 		plugins_url( '../build/index.js', __FILE__ ),
-		[ 'wp-i18n', 'wp-element', 'wp-blocks', 'wp-components', 'wp-editor' ],
+		[ 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ],
 		filemtime( plugin_dir_path( __FILE__ ) . $blockPath )
 	);
 
@@ -36,7 +36,7 @@ function gfd_register_block_styles() {
 	wp_enqueue_style(
 		'gfd-styles',
 		plugins_url( '../assets/style.css', __FILE__ ),
-		array( ),
+		array(),
 		filemtime( plugin_dir_path( __FILE__ ) . '../assets/style.css' )
 	);
 }
