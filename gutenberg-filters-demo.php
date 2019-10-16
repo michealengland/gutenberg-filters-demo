@@ -20,7 +20,7 @@ include_once( plugin_dir_path( __FILE__ ) . '/inc/enqueue-scripts.php' );
 // Generate scaffolding page.
 include_once( plugin_dir_path( __FILE__ ) . '/inc/generate-scaffold.php' );
 
-// Generate setup blocks on page.
+// Setup blocks on page.
 include_once( plugin_dir_path( __FILE__ ) . '/inc/template.php' );
 
 /**
