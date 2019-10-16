@@ -10,7 +10,7 @@ function gfd_blocks_editor_scripts() {
 	wp_enqueue_script(
 		'gfd-blocks-js',
 		plugins_url( '../build/index.js', __FILE__ ),
-		[ 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' ],
+		[ 'wp-blocks', 'wp-dom-ready', 'wp-edit-post', 'wp-hooks' ],
 		filemtime( plugin_dir_path( __FILE__ ) . $blockPath )
 	);
 
