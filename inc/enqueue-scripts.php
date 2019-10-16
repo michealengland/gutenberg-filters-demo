@@ -39,5 +39,13 @@ function gfd_register_block_styles() {
 		array(),
 		filemtime( plugin_dir_path( __FILE__ ) . '../assets/style.css' )
 	);
+
+	// Enqueue style.css.
+	wp_enqueue_style(
+		'quote-2-styles',
+		plugins_url( '../src/ch2-server-side-renders/quote-2-style.css', __FILE__ ),
+		array(),
+		filemtime( plugin_dir_path( __FILE__ ) . '../src/ch2-server-side-renders/quote-2-style.css' )
+	);
 }
 add_action( 'init', 'gfd_register_block_styles' );
