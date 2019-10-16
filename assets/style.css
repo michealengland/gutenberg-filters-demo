@@ -1,7 +1,24 @@
+/* ch1 */
 .is-style-roundy-round li img {
 	border-radius: 20px;
 }
 
+/* ch1 */
 .is-style-blocky-block li img {
 	border: 3px solid #222;
+}
+
+/* ch2 */
+.is-style-blue-quote-1 {
+	color: #0da6da;
+}
+
+/* ch2 */
+.is-style-blue-quote-2 {
+	color: #0884ad;
+}
+
+/* ch2 */
+.is-style-blue-quote-3 {
+	color: #025a86;
 }
