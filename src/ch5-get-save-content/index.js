@@ -3,13 +3,14 @@
  *
  * @param {*} props
  */
+
 function addBackgroundColorStyle( props, settings ) {
-
-	console.log( settings.name );
-
 	if ( 'core/paragraph' !== settings.name ) {
 		return;
 	}
+
+	// console.log( props );
+	// console.log( settings );
 
 	return lodash.assign( props, { style: { backgroundColor: 'red' } } );
 }
