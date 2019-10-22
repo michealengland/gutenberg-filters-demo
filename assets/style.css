@@ -22,3 +22,11 @@
 .is-style-blue-quote-3 {
 	color: #025a86;
 }
+
+/* ch4 */
+.modified-saved-element {
+	border: 2px solid #025a86;
+	border-radius: 10px;
+	background-color: #98e5ff;
+	padding: 10px;
+}
