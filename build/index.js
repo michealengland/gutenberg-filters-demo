@@ -79,6 +79,14 @@
 /***/ (function(module, exports) {
 
 /**
+ * This document enqueues each lesson.
+ * Avoid enable more than one filter at a time.
+ *
+ * @note Running `npm run start` is a requirement while enabling filters.
+ * @note Chapter 2 & 13 are server side rendered.
+ */
+
+/**
  * Internal dependencies
  */
 // import './ch1-block-style-variations';
