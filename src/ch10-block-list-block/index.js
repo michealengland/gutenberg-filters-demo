@@ -2,7 +2,6 @@
  * It receives the original BlockListBlock component and returns a new wrapped component.
  *
  * @link https://developer.wordpress.org/block-editor/developers/filters/block-filters/#editor-blocklistblock
- * @source
  */
 
 const { createHigherOrderComponent } = wp.compose;
