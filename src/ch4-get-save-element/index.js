@@ -1,5 +1,5 @@
 /**
- * Adds a class to the core/list block called wp-block-list.
+ * Filter a saved element.
  *
  * @param element
  * @param blockType

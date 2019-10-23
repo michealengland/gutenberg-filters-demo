@@ -37,3 +37,15 @@
 	color: #98e5ff;
 	padding: 20px;
 }
+
+/* ch9 */
+.expecto-patronum {
+	background-color: #98e5ff;
+	border: 1px solid orange;
+}
+
+/* ch10 */
+.aparecium {
+	outline: 1px solid #98e5ff;
+	border-radius: 10px;
+}

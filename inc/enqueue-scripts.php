@@ -49,3 +49,16 @@ function gfd_register_block_styles() {
 	);
 }
 add_action( 'init', 'gfd_register_block_styles' );
+
+
+/**
+ * Example of how to enqueue a blacklist script file.
+ */
+function my_plugin_blacklist_blocks() {
+	wp_enqueue_script(
+		'my-plugin-blacklist-blocks',
+		plugins_url( 'my-plugin.js', __FILE__ ),
+		array( 'wp-blocks', 'wp-dom-ready', 'wp-edit-post' )
+	);
+}
+// add_action( 'enqueue_block_editor_assets', 'my_plugin_blacklist_blocks' );
