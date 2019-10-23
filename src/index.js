@@ -23,6 +23,3 @@
 // import './ch12-whitelist-blocks';
 
 // import './ch14-block-categories';
-// import './ch15-parser-filters';
-// import './ch16-combining-filters';
-// import './chX-inserting-controls';
