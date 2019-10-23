@@ -1,7 +1,7 @@
 /**
  * Based on: Block Style Variations
  *
- * @url https://developer.wordpress.org/block-editor/developers/filters/block-filters/#block-style-variations
+ * @link https://developer.wordpress.org/block-editor/developers/filters/block-filters/#block-style-variations
  */
 // Add a class name to core gallery.
 wp.blocks.registerBlockStyle( 'core/gallery', {

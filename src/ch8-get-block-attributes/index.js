@@ -24,8 +24,8 @@ function blockTransformFilter( attributes, blockTypeOrName, innerHTML ) {
 	const dobermanPuppiesImage = 'https://gutenbergfilters.test/wp-content/uploads/2019/10/eyes-hurt-from-the-cuteness.jpeg';
 
 	// Assign new values to attributes.
-	// attributes.url = dobermanPuppiesImage;
-	// attributes.caption = 'So cuteeeeeeeee.';
+	attributes.url = dobermanPuppiesImage;
+	attributes.caption = 'So cuteeeeeeeee.';
 
 	return attributes;
 }

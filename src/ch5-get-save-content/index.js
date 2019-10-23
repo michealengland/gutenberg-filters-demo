@@ -1,11 +1,13 @@
 /**
  * A filter that applies to all blocks returning a WP Element in the save function.
  *
- * @param {*} props
+ * @param object props
+ * @param object settings
+ * @link https://developer.wordpress.org/block-editor/developers/filters/block-filters/#blocks-getsavecontent-extraprops
  */
 
 function addBackgroundColorStyle( props, settings ) {
-	if ( 'core/paragraph' !== settings.name ) {
+	if ( 'core/list' !== settings.name ) {
 		return;
 	}
 

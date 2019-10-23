@@ -1,7 +1,8 @@
 /**
  * Used to modify the block’s edit component. It receives the original block BlockEdit component and returns a new wrapped component.
  *
- *
+ * @link https://developer.wordpress.org/block-editor/developers/filters/block-filters/#editor-blockedit
+ * @note This demo is based on modified version of Zac Gordons Advanced Gutenberg course.
  */
 const { createHigherOrderComponent } = wp.compose;
 const { Fragment } = wp.element;

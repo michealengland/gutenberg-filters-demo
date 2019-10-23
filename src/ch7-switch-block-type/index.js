@@ -10,8 +10,8 @@
  */
 
 function blockTransformFilter( transformedBlock, blocks ) {
-	console.log( transformedBlock );
-	console.log( blocks );
+	// console.log( transformedBlock );
+	// console.log( blocks );
 
 	return transformedBlock;
 }

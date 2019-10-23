@@ -1,7 +1,8 @@
 <?php
 /**
- * Setup style variations with PHP.
+ * Setup style variations that render from the server using PHP.
  *
+ * @link https://developer.wordpress.org/block-editor/developers/filters/block-filters/#server-side-registration-helper
  */
 
 // The Gutenberg plugin must be installed for this to work.
@@ -47,7 +48,7 @@ if ( ! function_exists( 'register_block_style' ) ) {
 			)
 		);
 	}
-	add_action( 'admin_init', 'setup_ssr_filters' );
+	// add_action( 'admin_init', 'setup_ssr_filters' );
 
 	/**
 	 * Deregister Blue Quote 3
@@ -62,7 +63,5 @@ if ( ! function_exists( 'register_block_style' ) ) {
 		unregister_block_style( 'core/quote', 'blue-quote-3' );
 
 	}
-	add_action( 'admin_init', 'remove_ssr_filter' );
+	// add_action( 'admin_init', 'remove_ssr_filter' );
 }
-
-
