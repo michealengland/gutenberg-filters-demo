@@ -32,6 +32,9 @@ include_once( plugin_dir_path( __FILE__ ) . '/src/ch13-hide-blocks-from-inserter
 // Import Ch14. SSR category filter.
 include_once( plugin_dir_path( __FILE__ ) . '/src/ch14-block-categories/ch14-managing-block-cats.php' );
 
+// Import Ch15. Slofill.
+include_once( plugin_dir_path( __FILE__ ) . '/src/ch15-slotfill-sidebar/slotfill-meta.php' );
+
 /**
  * Delete generated pages when plugin is deactivated.
  *
