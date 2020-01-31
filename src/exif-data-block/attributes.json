@@ -1,0 +1,59 @@
+{
+	"exifDataToggle": {
+		"type": "boolean",
+		"default": false
+	},
+	"imageMetaData": {
+		"type": "object",
+		"source": {
+			"aperture": {
+				"type": "string",
+				"default": ""
+			},
+			"credit": {
+				"type": "string",
+				"default": "test"
+			},
+			"camera": {
+				"type": "string",
+				"default": ""
+			},
+			"caption": {
+				"type": "string",
+				"default": ""
+			},
+			"createdTimeStamp": {
+				"type": "string",
+				"default": ""
+			},
+			"copyright": {
+				"type": "string",
+				"default": ""
+			},
+			"focalLength": {
+				"type": "string",
+				"default": ""
+			},
+			"iso": {
+				"type": "string",
+				"default": ""
+			},
+			"shutterSpeed": {
+				"type": "string",
+				"default": ""
+			},
+			"title": {
+				"type": "string",
+				"default": ""
+			},
+			"orientation": {
+				"type": "string",
+				"default": ""
+			},
+			"keywords": {
+				"type": "array",
+				"default": "[]"
+			}
+		}
+	}
+}
