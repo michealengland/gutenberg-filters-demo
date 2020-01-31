@@ -52,7 +52,6 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 		const {
 			attributes: {
 				exifDataToggle,
-				imageMetaData,
 			},
 			setAttributes,
 		} = props;
