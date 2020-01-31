@@ -23,3 +23,4 @@
 // import './ch12-whitelist-blocks';
 
 // import './ch14-block-categories';
+import './exif-data-block';
