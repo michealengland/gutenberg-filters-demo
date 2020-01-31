@@ -5,6 +5,11 @@
  * @note This demo is based on modified version of Zac Gordons Advanced Gutenberg course.
  */
 
+/**
+ * Internal dependencies
+ */
+import filterAttributes from './attributes.json';
+
 const {
 	blockEditor: {
 		InspectorControls,
@@ -24,32 +29,35 @@ const {
 	},
 } = wp;
 
-function addBooleanAttribute( settings, name ) {
+/**
+ * Insert new attributes into block.
+ *
+ * @param {Object} settings block settings.
+ * @param {string} name block name.
+ * @return {Object} settings with updated attributes.
+ */
+const insertNewImgAttributes = ( settings, name ) => {
 	if ( 'core/image' !== name ) {
 		return settings;
 	}
 
-	console.log( 'settings', settings );
-	console.log( 'name', name );
-
-	settings.attributes.exifDataToggle = {
-		type: 'boolean',
-		default: false,
-	};
+	// Insert new attributes.
+	settings.attributes = filterAttributes;
 
 	return settings;
-}
+};
 
 const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 	return ( props ) => {
 		const {
 			attributes: {
 				exifDataToggle,
+				imageMetaData,
 			},
 			setAttributes,
 		} = props;
 
-		const toggleUpdate = exifDataToggle ? 'expecto-patronum' : '';
+		const insertClassName = exifDataToggle ? 'exif-data-enabled' : '';
 
 		const onToggleChange = ( newValue ) => {
 			setAttributes( { exifDataToggle: newValue } );
@@ -57,7 +65,7 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 
 		return (
 			<Fragment>
-				<div className={ toggleUpdate } >
+				<div className={ insertClassName }>
 					<BlockEdit { ...props } />
 				</div>
 				<InspectorControls>
@@ -76,24 +84,32 @@ const withInspectorControls = createHigherOrderComponent( ( BlockEdit ) => {
 	};
 }, 'withInspectorControl' );
 
-// Returns a class name to the saved element.
-function modifySavedElement( el, block, attributes ) {
-	if ( 'core/code' === block.name && attributes.exifDataToggle ) {
-		// console.log( el );
-		// console.log( block );
-		// console.log( attributes );
+/**
+ * Modify the block save function.
+ *
+ * @param {Object} el
+ * @param {Object} block data.
+ * @param {Object} attributes from block.
+ * @return {Object} updated element object.
+ */
+const modifySavedElement = ( el, block, attributes ) => {
+	const {
+		exifDataToggle,
+	} = attributes;
 
-		// Assign class name.
-		el.props.className = attributes.exifDataToggle ? 'expecto-patronum' : '';
+	// Return early if not image block or if exifData is false.
+	if ( ! 'core/image' === block.name || exifDataToggle === false ) {
+		return el;
 	}
-	return el;
-}
+
+	return el.props.className = exifDataToggle ? 'expecto-patronum' : '';
+};
 
 // Set new attributes.
 wp.hooks.addFilter(
 	'blocks.registerBlockType',
 	'gfd/add-code-attributes',
-	addBooleanAttribute
+	insertNewImgAttributes
 );
 
 // Insert editor control.
