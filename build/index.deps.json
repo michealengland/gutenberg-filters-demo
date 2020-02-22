@@ -1,1 +1,1 @@
-["wp-polyfill"]
+["lodash","wp-components","wp-element","wp-polyfill"]

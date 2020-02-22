@@ -19,7 +19,9 @@
 // import './ch8-get-block-attributes';
 // import './ch9-block-edit';
 // import './ch10-block-list-block';
-// import './ch11-blacklist-blocks';
+// import './chs11-blacklist-blocks';
 // import './ch12-whitelist-blocks';
 
 // import './ch14-block-categories';
+// import './ch16-default-data-test';
+import './ch17-filtering-components';
