@@ -1,0 +1,16 @@
+/**
+ * Editor Styles
+ *
+ * CSS for just Backend enqueued after style.scss
+ * which makes it higher in priority.
+ */
+
+blockquote {
+  border-left: 1px solid #807c78;
+  padding: 0 0 0 20px;
+  
+  &,
+  &.editor-rich-text__tinymce {
+    margin: 22px 40px 30px 60px;
+  }
+}

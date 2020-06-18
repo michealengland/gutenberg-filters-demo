@@ -10,6 +10,7 @@
  * Internal dependencies
  */
 // import './ch1-block-style-variations';
+// import './useRef-test';
 
 // import './ch3-register-block-type';
 // import './ch4-get-save-element';
@@ -25,4 +26,5 @@
 // import './ch14-block-categories';
 // import './ch16-default-data-test';
 // import './ch17-filtering-components';
-import './ch18-autocomplete-component';
+// import './ch18-autocomplete-component';
+import './RichText2';
