@@ -20,10 +20,12 @@ const authors = [
 
 // 1. Write to the store using setAuthors method.
 dispatch( 'dj-wp-byline-authors' ).setAuthors( authors );
+// eslint-disable-next-line no-console
 console.log( 'STORE dispatch setAuthors()', authors );
 
 // 2. Next, I'm going to select a value from the store.
 const bylineAuthors = select( 'dj-wp-byline-authors' ).getAuthors();
+// eslint-disable-next-line no-console
 console.log( 'STORE select getAuthors()', bylineAuthors );
 
 // 3. Now it's time to change the value again and see what happens.
@@ -34,6 +36,7 @@ subscribe( () => {
 	// You could use this opportunity to test whether the derived result of a
 	// selector has subsequently changed as the result of a state update.
 	const subscribedValue = select( 'dj-wp-byline-authors' ).getAuthors();
+	// eslint-disable-next-line no-console
 	console.log( 'STORE subscribe() getAuthors()', subscribedValue );
 } );
 
