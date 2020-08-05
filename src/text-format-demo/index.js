@@ -12,7 +12,13 @@ const MyToolbar = withState( {
 	isVisible: false,
 	isFormatSelected: false,
 } )( ( props ) => {
-	const { isActive, isFormatSelected, isVisible, setState } = props;
+	const {
+		isActive,
+		isFormatSelected,
+		isVisible,
+		setAttributes,
+		setState,
+	} = props;
 
 	// set IsVisble upon field click.
 	if ( isVisible !== true ) {
@@ -26,7 +32,15 @@ const MyToolbar = withState( {
 
 	// Apply new format to text.
 	const onButtonClick = () => {
-		props.onChange( toggleFormat( props.value, { type: 'gfd/text-tagging' } ) );
+		props.onChange( toggleFormat(
+			props.value,
+			{
+				type: 'gfd/text-tagging',
+				attributes: {
+					url,
+				},
+			}
+		) );
 	};
 
 	// Functionality for determining if Popover should be open.
@@ -38,6 +52,12 @@ const MyToolbar = withState( {
 	// Activate Popover.
 	const openTickerControl = () => {
 		setIsURLPickerOpen( true );
+		setAttributes( {
+			url,
+			linkTarget: undefined,
+			rel: undefined,
+		} );
+
 		return false; // prevents default behaviour for event
 	};
 
@@ -88,10 +108,11 @@ const MyToolbar = withState( {
 registerFormatType(
 	'gfd/text-tagging', {
 		title: 'Tag',
-		tagName: 'samp',
+		tagName: 'a',
+		attributes: {
+			url: 'href',
+		},
 		className: null,
 		edit: MyToolbar,
 	}
 );
-
-
