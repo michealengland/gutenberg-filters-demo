@@ -10,13 +10,18 @@ import { registerFormatType, toggleFormat } from '@wordpress/rich-text';
 
 const MyToolbar = withState( {
 	isVisible: false,
+	isFormatSelected: false,
 } )( ( props ) => {
-	const { isActive } = props;
+	const { isActive, isFormatSelected, isVisible, setState } = props;
+
+	// set IsVisble upon field click.
+	if ( isVisible !== true ) {
+		setState( { isVisible: true } );
+	}
 
 	// isActive will only trigger if format type matches 'gfd/text-tagging'
-	if ( isActive ) {
-		// eslint-disable-next-line no-console
-		console.log( props.value.activeFormats[ 0 ].type );
+	if ( isVisible && isActive && isFormatSelected === false ) {
+		setState( { isFormatSelected: true } );
 	}
 
 	// Apply new format to text.
@@ -37,9 +42,11 @@ const MyToolbar = withState( {
 	};
 
 	// Remove text format.
-	const unlineTicker = () => {
+	const removeTextFormat = () => {
 		props.onChange( toggleFormat( props.value, { type: 'gfd/text-tagging' } ) );
 		setIsURLPickerOpen( false );
+
+		setState( { isFormatSelected: false } );
 		return false; // prevents default behaviour for event
 	};
 
@@ -56,12 +63,12 @@ const MyToolbar = withState( {
 					/>
 				</Toolbar>
 			</BlockControls>
-			{ isActive && (
+			{ ( isVisible || isActive ) && (
 				<KeyboardShortcuts
 					bindGlobal
 					shortcuts={ {
 						[ rawShortcut.primary( ';' ) ]: openTickerControl,
-						[ rawShortcut.primaryShift( ';' ) ]: unlineTicker,
+						[ rawShortcut.primaryShift( ';' ) ]: removeTextFormat,
 					} }
 				/>
 			) }
@@ -70,7 +77,7 @@ const MyToolbar = withState( {
 					position="bottom center"
 					onClose={ () => setIsURLPickerOpen( false ) }
 				>
-					Popover is toggled!
+					{ url }
 				</Popover>
 			) }
 		</>
@@ -86,3 +93,5 @@ registerFormatType(
 		edit: MyToolbar,
 	}
 );
+
+
