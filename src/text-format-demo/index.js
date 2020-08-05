@@ -1,38 +1,27 @@
 /**
  * WordPress dependencies
  */
-import { useState } from '@wordpress/element';
-import { rawShortcut, displayShortcut } from '@wordpress/keycodes';
-import { registerFormatType, toggleFormat } from '@wordpress/rich-text';
 import { BlockControls } from '@wordpress/block-editor';
-import { Toolbar, ToolbarButton, Popover, KeyboardShortcuts } from '@wordpress/components';
+import { KeyboardShortcuts, Popover, Toolbar, ToolbarButton } from '@wordpress/components';
 import { withState } from '@wordpress/compose';
-
-console.log( { KeyboardShortcuts, displayShortcut, rawShortcut } );
+import { useState } from '@wordpress/element';
+import { displayShortcut, rawShortcut } from '@wordpress/keycodes';
+import { registerFormatType, toggleFormat } from '@wordpress/rich-text';
 
 const MyToolbar = withState( {
-	valueTest: false,
 	isVisible: false,
 } )( ( props ) => {
-	const { isActive, isVisible, setState, setAttributes } = props;
+	const { isActive } = props;
 
-	// const [isSelected, setIsSelected] = useState(false);
-
-	// console.log({props});
-	// isActive will only trigger if props.value.activeFormats[ 0 ].type === 'gfd/text-tagging'
+	// isActive will only trigger if format type matches 'gfd/text-tagging'
 	if ( isActive ) {
-		console.log(props.value.activeFormats[ 0 ].type);
-		// setIsSelected( true );
+		// eslint-disable-next-line no-console
+		console.log( props.value.activeFormats[ 0 ].type );
 	}
 
+	// Apply new format to text.
 	const onButtonClick = () => {
-		// This controls how the format is applied.
-		const newFormat = {
-			...props.value, // original formats object.
-			end: props.value.end,
-		};
-
-		props.onChange( toggleFormat( newFormat, { type: 'gfd/text-tagging' } ) );
+		props.onChange( toggleFormat( props.value, { type: 'gfd/text-tagging' } ) );
 	};
 
 	// Functionality for determining if Popover should be open.
@@ -41,22 +30,17 @@ const MyToolbar = withState( {
 	const urlIsSet = !! url;
 	const urlIsSetandSelected = urlIsSet && isActive;
 
-	const openLinkControl = () => {
-		console.log('Open Popover', isURLPickerOpen);
+	// Activate Popover.
+	const openTickerControl = () => {
 		setIsURLPickerOpen( true );
 		return false; // prevents default behaviour for event
 	};
 
-	const unlinkButton = () => {
-		setAttributes( {
-			url: undefined,
-			linkTarget: undefined,
-			rel: undefined,
-		} );
-
+	// Remove text format.
+	const unlineTicker = () => {
+		props.onChange( toggleFormat( props.value, { type: 'gfd/text-tagging' } ) );
 		setIsURLPickerOpen( false );
-
-		console.log( 'Close Popover', isURLPickerOpen );
+		return false; // prevents default behaviour for event
 	};
 
 	return (
@@ -76,8 +60,8 @@ const MyToolbar = withState( {
 				<KeyboardShortcuts
 					bindGlobal
 					shortcuts={ {
-						[ rawShortcut.primary( ';' ) ]: openLinkControl,
-						[ rawShortcut.primaryShift( ';' ) ]: unlinkButton,
+						[ rawShortcut.primary( ';' ) ]: openTickerControl,
+						[ rawShortcut.primaryShift( ';' ) ]: unlineTicker,
 					} }
 				/>
 			) }
