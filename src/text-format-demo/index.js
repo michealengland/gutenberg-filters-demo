@@ -1,32 +1,62 @@
 /**
  * WordPress dependencies
  */
-import { registerFormatType, toggleFormat, unregisterFormatType } from '@wordpress/rich-text';
-import { BlockControls, RichTextToolbarButton } from '@wordpress/block-editor';
-import { Toolbar, ToolbarButton, Popover } from '@wordpress/components';
+import { useState } from '@wordpress/element';
+import { rawShortcut, displayShortcut } from '@wordpress/keycodes';
+import { registerFormatType, toggleFormat } from '@wordpress/rich-text';
+import { BlockControls } from '@wordpress/block-editor';
+import { Toolbar, ToolbarButton, Popover, KeyboardShortcuts } from '@wordpress/components';
 import { withState } from '@wordpress/compose';
 
+console.log( { KeyboardShortcuts, displayShortcut, rawShortcut } );
+
 const MyToolbar = withState( {
-	activeControl: false,
+	valueTest: false,
 	isVisible: false,
 } )( ( props ) => {
-	const { activeControl, setState, isActive } = props;
+	const { isActive, isVisible, setState, setAttributes } = props;
+
+	// const [isSelected, setIsSelected] = useState(false);
+
+	// console.log({props});
+	// isActive will only trigger if props.value.activeFormats[ 0 ].type === 'gfd/text-tagging'
+	if ( isActive ) {
+		console.log(props.value.activeFormats[ 0 ].type);
+		// setIsSelected( true );
+	}
 
 	const onButtonClick = () => {
-		// if ( activeControl ) {
-		// 	setState( { activeControl: false } );
-		// } else {
-		// 	setState( { activeControl: true } );
-		// }
-
 		// This controls how the format is applied.
 		const newFormat = {
 			...props.value, // original formats object.
 			end: props.value.end,
 		};
 
-		// console.log( 'newFormat', newFormat );
 		props.onChange( toggleFormat( newFormat, { type: 'gfd/text-tagging' } ) );
+	};
+
+	// Functionality for determining if Popover should be open.
+	const [ isURLPickerOpen, setIsURLPickerOpen ] = useState( false );
+	const url = 'https://google.com';
+	const urlIsSet = !! url;
+	const urlIsSetandSelected = urlIsSet && isActive;
+
+	const openLinkControl = () => {
+		console.log('Open Popover', isURLPickerOpen);
+		setIsURLPickerOpen( true );
+		return false; // prevents default behaviour for event
+	};
+
+	const unlinkButton = () => {
+		setAttributes( {
+			url: undefined,
+			linkTarget: undefined,
+			rel: undefined,
+		} );
+
+		setIsURLPickerOpen( false );
+
+		console.log( 'Close Popover', isURLPickerOpen );
 	};
 
 	return (
@@ -37,75 +67,31 @@ const MyToolbar = withState( {
 						title="Insert Ticker"
 						icon={ 'chart-line' }
 						isActive={ isActive }
-						// onKeyPress={ (e) => {
-						// 	console.log( 'onKeyPress', e.target );
-						// } }
 						onClick={ onButtonClick }
+						shortcut={ displayShortcut.primary( ';' ) }
 					/>
 				</Toolbar>
 			</BlockControls>
 			{ isActive && (
-				<Popover>
+				<KeyboardShortcuts
+					bindGlobal
+					shortcuts={ {
+						[ rawShortcut.primary( ';' ) ]: openLinkControl,
+						[ rawShortcut.primaryShift( ';' ) ]: unlinkButton,
+					} }
+				/>
+			) }
+			{ ( isURLPickerOpen || urlIsSetandSelected ) && (
+				<Popover
+					position="bottom center"
+					onClose={ () => setIsURLPickerOpen( false ) }
+				>
 					Popover is toggled!
 				</Popover>
 			) }
 		</>
 	);
 } );
-
-// import { Button, Popover } from '@wordpress/components';
-// import { withState } from '@wordpress/compose';
-
-const MyPopover = withState( {
-	isVisible: false,
-} )( ( { isVisible, setState } ) => {
-	const toggleVisible = () => {
-		setState( ( state ) => ( { isVisible: ! state.isVisible } ) );
-	};
-	return (
-		<Button isSecondary onClick={ toggleVisible }>
-			Toggle Popover!
-			{ isVisible && (
-				<Popover>
-					Popover is toggled!
-				</Popover>
-			) }
-		</Button>
-	);
-} );
-
-// const MyCustomButton = ( props ) => {
-
-// 	return (
-// 		<>
-// 			{ /* <MyKeyboardShortcuts /> */ }
-// 			<RichTextToolbarButton
-// 				icon="editor-code"
-// 				title="Sample output"
-// 				onClick={ () => {
-// 					// This controls how the format is applied.
-// 					console.log( props.value );
-
-// 					const newFormat = {
-// 						...props.value, // original formats object.
-// 						end: props.value.end,
-// 					};
-
-// 					// console.log( 'newFormat', newFormat );
-
-// 					// <URLInputButton
-// 					// 	value={ 'test' }
-// 					// 	url={ 'test' }
-// 					// 	// onChange={ ( url, post ) => setAttributes( { url, text: (post && post.title) || 'Click here' } ) }
-// 					// />
-
-// 					props.onChange( toggleFormat( newFormat, { type: 'gfd/text-tagging' } ) );
-// 				} }
-// 				isActive={ props.isActive }
-// 			/>
-// 		</>
-// 	);
-// };
 
 // This controls the markup added to the text content.
 registerFormatType(
@@ -116,8 +102,3 @@ registerFormatType(
 		edit: MyToolbar,
 	}
 );
-
-// First check for available format types using
-// wp.data.select( 'core/rich-text' ).getFormatTypes();
-// Then use the following function to deregister it.
-// unregisterFormatType( 'core/italic' );
