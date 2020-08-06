@@ -4,19 +4,25 @@
 import { BlockControls } from '@wordpress/block-editor';
 import { KeyboardShortcuts, Popover, Toolbar, ToolbarButton } from '@wordpress/components';
 import { withState } from '@wordpress/compose';
-import { useState } from '@wordpress/element';
+import { useMemo, useState } from '@wordpress/element';
 import { displayShortcut, rawShortcut } from '@wordpress/keycodes';
 import { registerFormatType, toggleFormat } from '@wordpress/rich-text';
 
+/**
+ * External dependencies
+ */
+import { uniqueId } from 'lodash';
+
 const MyToolbar = withState( {
+	addingLink: false,
 	isVisible: false,
 	isFormatSelected: false,
 } )( ( props ) => {
 	const {
+		addingLink,
 		isActive,
 		isFormatSelected,
 		isVisible,
-		setAttributes,
 		setState,
 	} = props;
 
@@ -61,9 +67,57 @@ const MyToolbar = withState( {
 		return false; // prevents default behaviour for event
 	};
 
+	const mountingKey = useMemo( uniqueId, [ addingLink ] );
+
+	/**
+	 * Gets the position of the text location.
+	 */
+	const anchorRef = useMemo( () => {
+		const selection = window.getSelection();
+
+		if ( ! selection.rangeCount ) {
+			return;
+		}
+
+		const range = selection.getRangeAt( 0 );
+
+		if ( addingLink && ! isActive ) {
+			return range;
+		}
+
+		let element = range.startContainer;
+
+		// If the caret is right before the element, select the next element.
+		element = element.nextElementSibling || element;
+
+		while ( element.nodeType !== window.Node.ELEMENT_NODE ) {
+			element = element.parentNode;
+		}
+
+		return element.closest( 'a' );
+	}, [ addingLink, props.value.start, props.value.end ] );
+
+	/**
+	 * 5.3.4 Fix
+	 *
+	 * Using the anchorRef prop does not work in 5.3.4. Use
+	 * anchorRef to get the bounding rectangle object on the
+	 * anchorRect prop instead.
+	 */
+	const anchorRefRect = anchorRef ? anchorRef.getBoundingClientRect() : '';
+
 	// Remove text format.
 	const removeTextFormat = () => {
-		props.onChange( toggleFormat( props.value, { type: 'gfd/text-tagging' } ) );
+		props.onChange( toggleFormat(
+			props.value,
+			{
+				type: 'gfd/text-tagging',
+				attributes: {
+					url,
+				},
+			}
+		) );
+
 		setIsURLPickerOpen( false );
 
 		setState( { isFormatSelected: false } );
@@ -94,10 +148,13 @@ const MyToolbar = withState( {
 			) }
 			{ ( isURLPickerOpen || urlIsSetandSelected ) && (
 				<Popover
+					key={ mountingKey }
+					anchorRect={ anchorRefRect }
+					focusOnMount={ addingLink ? 'firstElement' : false }
 					position="bottom center"
 					onClose={ () => setIsURLPickerOpen( false ) }
 				>
-					{ url }
+
 				</Popover>
 			) }
 		</>
