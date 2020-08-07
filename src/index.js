@@ -27,4 +27,4 @@
 // import './ch16-default-data-test';
 // import './ch17-filtering-components';
 // import './ch18-autocomplete-component';
-import './RichText2';
+import './text-format-demo';
