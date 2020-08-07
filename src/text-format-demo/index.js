@@ -4,9 +4,9 @@
 import { BlockControls } from '@wordpress/block-editor';
 import { KeyboardShortcuts, Popover, Toolbar, ToolbarButton } from '@wordpress/components';
 import { withState } from '@wordpress/compose';
-import { useMemo, useState } from '@wordpress/element';
+import { useMemo } from '@wordpress/element';
 import { displayShortcut, rawShortcut } from '@wordpress/keycodes';
-import { registerFormatType, toggleFormat } from '@wordpress/rich-text';
+import { applyFormat, registerFormatType, toggleFormat } from '@wordpress/rich-text';
 
 /**
  * External dependencies
@@ -16,55 +16,47 @@ import { uniqueId } from 'lodash';
 const MyToolbar = withState( {
 	addingLink: false,
 	isVisible: false,
-	isFormatSelected: false,
+	isURLPickerOpen: false,
+	url: '',
 } )( ( props ) => {
 	const {
 		addingLink,
 		isActive,
-		isFormatSelected,
+		isURLPickerOpen,
 		isVisible,
 		setState,
+		url,
 	} = props;
 
-	// set IsVisble upon field click.
-	if ( isVisible !== true ) {
-		setState( { isVisible: true } );
-	}
-
-	// isActive will only trigger if format type matches 'gfd/text-tagging'
-	if ( isVisible && isActive && isFormatSelected === false ) {
-		setState( { isFormatSelected: true } );
-	}
-
-	// Apply new format to text.
-	const onButtonClick = () => {
-		props.onChange( toggleFormat(
-			props.value,
-			{
-				type: 'gfd/text-tagging',
-				attributes: {
-					url,
-				},
-			}
-		) );
-	};
-
 	// Functionality for determining if Popover should be open.
-	const [ isURLPickerOpen, setIsURLPickerOpen ] = useState( false );
-	const url = 'https://google.com';
 	const urlIsSet = !! url;
 	const urlIsSetandSelected = urlIsSet && isActive;
 
-	// Activate Popover.
+	// set isVisble to true to enable upon field click.
+	if ( isVisible !== true && isActive ) {
+		setState( {
+			isVisible: true,
+		} );
+	}
+
+	// Open Popover.
 	const openTickerControl = () => {
-		setIsURLPickerOpen( true );
-		setAttributes( {
-			url,
-			linkTarget: undefined,
-			rel: undefined,
+		// Activate addingLink so that the anchorRef
+		// will focus the correct container.
+		setState( {
+			addingLink: true,
+			isURLPickerOpen: true,
 		} );
 
 		return false; // prevents default behaviour for event
+	};
+
+	// Close Popover
+	const closeTickerControl = () => {
+		setState( {
+			addingLink: false,
+			isURLPickerOpen: false,
+		} );
 	};
 
 	const mountingKey = useMemo( uniqueId, [ addingLink ] );
@@ -106,6 +98,29 @@ const MyToolbar = withState( {
 	 */
 	const anchorRefRect = anchorRef ? anchorRef.getBoundingClientRect() : '';
 
+	// On form submit.
+	const insertFormat = ( e ) => {
+		// Prevent form submission.
+		e.preventDefault();
+
+		props.onChange( applyFormat(
+			props.value,
+			{
+				type: 'gfd/text-tagging',
+				attributes: {
+					url,
+				},
+			}
+		) );
+
+		// We're no longer adding a link.
+		setState( {
+			addingLink: false,
+			isVisible: false,
+			isURLPickerOpen: false,
+		} );
+	};
+
 	// Remove text format.
 	const removeTextFormat = () => {
 		props.onChange( toggleFormat(
@@ -118,9 +133,10 @@ const MyToolbar = withState( {
 			}
 		) );
 
-		setIsURLPickerOpen( false );
+		setState( {
+			isURLPickerOpen: false,
+		} );
 
-		setState( { isFormatSelected: false } );
 		return false; // prevents default behaviour for event
 	};
 
@@ -128,13 +144,24 @@ const MyToolbar = withState( {
 		<>
 			<BlockControls>
 				<Toolbar>
-					<ToolbarButton
-						title="Insert Ticker"
-						icon={ 'chart-line' }
-						isActive={ isActive }
-						onClick={ onButtonClick }
-						shortcut={ displayShortcut.primary( ';' ) }
-					/>
+					{ ! isActive && (
+						<ToolbarButton
+							title="Insert Ticker"
+							icon={ 'chart-line' }
+							isActive={ isActive }
+							onClick={ openTickerControl }
+							shortcut={ displayShortcut.primary( ';' ) }
+						/>
+					) }
+					{ isActive && (
+						<ToolbarButton
+							title="Insert Ticker"
+							icon={ 'chart-line' }
+							isActive={ isActive }
+							onClick={ openTickerControl }
+							shortcut={ displayShortcut.primaryShift( ';' ) }
+						/>
+					) }
 				</Toolbar>
 			</BlockControls>
 			{ ( isVisible || isActive ) && (
@@ -152,9 +179,21 @@ const MyToolbar = withState( {
 					anchorRect={ anchorRefRect }
 					focusOnMount={ addingLink ? 'firstElement' : false }
 					position="bottom center"
-					onClose={ () => setIsURLPickerOpen( false ) }
+					onClose={ closeTickerControl }
 				>
-
+					<form>
+						<label htmlFor="url-example">Update url on anchor tag.</label>
+						<input type="url"
+							name="url-example"
+							placeholder="enter url..."
+							value={ url }
+							default={ url }
+							onChange={ ( e ) => {
+								setState( { url: e.target.value } );
+							} }
+						/>
+						<button type="submit" onClick={ insertFormat }>Submit</button>
+					</form>
 				</Popover>
 			) }
 		</>
