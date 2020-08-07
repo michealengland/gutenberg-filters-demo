@@ -166,10 +166,10 @@ registerFormatType(
 	'gfd/text-tagging', {
 		title: 'Tag',
 		tagName: 'a',
+		className: 'inline-ticker',
 		attributes: {
 			url: 'href',
 		},
-		className: null,
 		edit: MyToolbar,
 	}
 );
