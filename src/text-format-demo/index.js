@@ -193,9 +193,8 @@ const MyToolbar = withState( {
 						<label htmlFor="url-example">Update url on anchor tag.</label>
 						<input type="url"
 							name="url-example"
-							default="test1234"
+							defaultValue={ props.activeAttributes.url || '' }
 							placeholder="enter url..."
-							value={ url }
 							onChange={ ( e ) => {
 								setState( { url: e.target.value } );
 							} }
