@@ -15,29 +15,62 @@ import { uniqueId } from 'lodash';
 
 const MyToolbar = withState( {
 	addingLink: false,
-	isVisible: false,
+	isBlockSelected: false,
 	isURLPickerOpen: false,
+	urlPrevious: '',
 	url: '',
 } )( ( props ) => {
 	const {
-		addingLink,
-		isActive,
-		isURLPickerOpen,
-		isVisible,
-		setState,
-		url,
+		addingLink, // In the process of adding a link
+		isActive, // Format applied and is currently selected
+		isURLPickerOpen, // Popover UI visibility
+		isBlockSelected, // Block is currently selected
+		setState, // WP Core function for updating state object
+		url, // ???
 	} = props;
+
+	// Enable keyboard shortcuts as soon as block is selected.
+	if ( isBlockSelected !== true ) {
+		setState( { isBlockSelected: true } );
+	}
+
+	if ( isActive && url === '' ) {
+		setState( {
+			url: props.activeAttributes.url,
+		} );
+	}
 
 	// Functionality for determining if Popover should be open.
 	const urlIsSet = !! url;
 	const urlIsSetandSelected = urlIsSet && isActive;
 
-	// set isVisble to true to enable upon field click.
-	if ( isVisible !== true && isActive ) {
-		setState( {
-			isVisible: true,
-		} );
-	}
+	// Toggle button format.
+	const onButtonClick = () => {
+		// Remove format if one is already present.
+		if ( isActive ) {
+			// Toggle format off.
+			props.onChange( toggleFormat(
+				props.value,
+				{
+					type: 'gfd/text-tagging',
+					attributes: {
+						url,
+					},
+				}
+			) );
+
+			setState( {
+				addingLink: false,
+				isURLPickerOpen: false,
+				url: '',
+			} );
+		} else {
+			// Open up Popvover UI.
+			openTickerControl();
+		}
+
+		return false; // prevents default behaviour for event
+	};
 
 	// Open Popover.
 	const openTickerControl = () => {
@@ -54,6 +87,7 @@ const MyToolbar = withState( {
 	// Close Popover
 	const closeTickerControl = () => {
 		setState( {
+			url: '',
 			addingLink: false,
 			isURLPickerOpen: false,
 		} );
@@ -112,64 +146,38 @@ const MyToolbar = withState( {
 				},
 			}
 		) );
-
-		// We're no longer adding a link.
-		setState( {
-			addingLink: false,
-			isVisible: false,
-			isURLPickerOpen: false,
-		} );
-	};
-
-	// Remove text format.
-	const removeTextFormat = () => {
-		props.onChange( toggleFormat(
-			props.value,
-			{
-				type: 'gfd/text-tagging',
-				attributes: {
-					url,
-				},
-			}
-		) );
-
-		setState( {
-			isURLPickerOpen: false,
-		} );
-
-		return false; // prevents default behaviour for event
 	};
 
 	return (
 		<>
 			<BlockControls>
 				<Toolbar>
-					{ ! isActive && (
+					{ ( ! isActive ) && (
 						<ToolbarButton
 							title="Insert Ticker"
 							icon={ 'chart-line' }
 							isActive={ isActive }
-							onClick={ openTickerControl }
+							onClick={ onButtonClick }
 							shortcut={ displayShortcut.primary( ';' ) }
 						/>
 					) }
-					{ isActive && (
+					{ ( isActive ) && (
 						<ToolbarButton
-							title="Insert Ticker"
+							title="Remove Ticker"
 							icon={ 'chart-line' }
 							isActive={ isActive }
-							onClick={ openTickerControl }
+							onClick={ onButtonClick }
 							shortcut={ displayShortcut.primaryShift( ';' ) }
 						/>
 					) }
 				</Toolbar>
 			</BlockControls>
-			{ ( isVisible || isActive ) && (
+			{ ( isBlockSelected ) && (
 				<KeyboardShortcuts
 					bindGlobal
 					shortcuts={ {
-						[ rawShortcut.primary( ';' ) ]: openTickerControl,
-						[ rawShortcut.primaryShift( ';' ) ]: removeTextFormat,
+						[ rawShortcut.primary( ';' ) ]: onButtonClick,
+						[ rawShortcut.primaryShift( ';' ) ]: onButtonClick,
 					} }
 				/>
 			) }
@@ -185,9 +193,9 @@ const MyToolbar = withState( {
 						<label htmlFor="url-example">Update url on anchor tag.</label>
 						<input type="url"
 							name="url-example"
+							default="test1234"
 							placeholder="enter url..."
 							value={ url }
-							default={ url }
 							onChange={ ( e ) => {
 								setState( { url: e.target.value } );
 							} }
