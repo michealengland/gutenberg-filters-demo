@@ -23,6 +23,6 @@
 	},
 	"dependencies": {
 		"classnames": "^2.2.6",
-		"lodash": "^4.17.14"
+		"lodash": "^4.17.21"
 	}
 }
